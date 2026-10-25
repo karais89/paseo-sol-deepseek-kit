@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sol61-orchestrator",
+    "name": "Orchestrator - Sol 6.1",
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "modeId": "auto-review",
+    "thinkingOptionId": "high",
+    "featureValues": { "service_tier": "default", "plan_mode": false },
+    "notes": "Sol coordinator settings for a Sol + DeepSeek development team. Use with the paseo-sol-deepseek skill for planning, bounded delegation, and final review. Selecting this profile does not invoke the skill or inject its instructions."
+  },
+  {
+    "id": "deepseek41-worker",
+    "name": "Worker - DeepSeek V4.1 Flash",
+    "provider": "opencode",
+    "model": "merge-gateway/deepseek/deepseek-v4.1-flash",
+    "modeId": "build",
+    "thinkingOptionId": "high",
+    "featureValues": { "auto_accept": false },
+    "notes": "Implementation, tests, and first-line fixes for bounded tasks delegated by the Sol coordinator; also suitable for focused investigation. Give scope and acceptance checks in initialPrompt. For review-only work, explicitly prohibit edits. Uses DeepSeek V4.1 Flash through Merge Gateway."
+  }
+]

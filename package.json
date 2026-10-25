@@ -1,0 +1,12 @@
+{
+  "name": "paseo-sol-deepseek-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Portable operating instructions and profiles for a Paseo Sol + DeepSeek team",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test",
+    "plan": "node scripts/install.mjs"
+  }
+}

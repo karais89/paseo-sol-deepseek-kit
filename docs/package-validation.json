@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "status": "prepared-for-upload",
   "checks": {
     "officialSkillStructureValidator": "passed",
     "installerBehaviorTests": { "passed": 6, "failed": 0 },
     "relativeDocumentationLinks": { "passed": 6, "failed": 0 },
-    "profileSettingsMatchOperatingCandidate": true,
+    "profileSettingsMatchRequestedSettings": true,
     "personalPathAndCredentialPatternScan": "passed",
     "cliDryRun": "passed"
   },

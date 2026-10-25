@@ -1,6 +1,6 @@
 {
   "name": "paseo-sol-deepseek-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Portable operating instructions and profiles for a Paseo Sol + DeepSeek team",

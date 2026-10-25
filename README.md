@@ -14,7 +14,7 @@ Sol이 작업을 이해·계획·분할하고, DeepSeek가 조사·구현·테�
 | 역할 | 프로필 | 모델 | 모드 | 추론 |
 | --- | --- | --- | --- | --- |
 | 계획·위임·최종 수락 | sol61-orchestrator | codex/gpt-6.1-sol | auto-review | high |
-| 조사·구현·테스트·자체 수정 | deepseek41-worker | opencode/merge-gateway/deepseek/deepseek-v4.1-flash | build | high |
+| 조사·구현·테스트·자체 수정 | deepseek41-worker | opencode/merge-gateway/deepseek/deepseek-v4.1-flash | build | max |
 
 모델을 사용할 수 없는 환경에서는 임의 대체하지 않는다. 필요한 접근 권한을 먼저 준비한다. 프로필 선택은 역할 지침을 자동 주입하지 않으므로 스킬도 호출해야 한다.
 

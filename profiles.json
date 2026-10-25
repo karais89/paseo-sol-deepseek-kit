@@ -15,7 +15,7 @@
     "provider": "opencode",
     "model": "merge-gateway/deepseek/deepseek-v4.1-flash",
     "modeId": "build",
-    "thinkingOptionId": "high",
+    "thinkingOptionId": "max",
     "featureValues": { "auto_accept": false },
     "notes": "Implementation, tests, and first-line fixes for bounded tasks delegated by the Sol coordinator; also suitable for focused investigation. Give scope and acceptance checks in initialPrompt. For review-only work, explicitly prohibit edits. Uses DeepSeek V4.1 Flash through Merge Gateway."
   }

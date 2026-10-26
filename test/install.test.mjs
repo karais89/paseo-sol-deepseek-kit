@@ -84,3 +84,13 @@ test('invalid and duplicate existing profiles are rejected before writes', t => 
     assert.equal(fs.existsSync(f.skillRoot), false);
   }
 });
+
+
+test('skill-only install copies the pre-merge guide at its referenced path',t=>{
+  const f=fixture(t);applyInstall(planInstall({...f,skillOnly:true}));
+  const base=path.join(f.skillRoot,'paseo-sol-deepseek');
+  const skill=fs.readFileSync(path.join(base,'SKILL.md'),'utf8');
+  assert.match(skill,/references\/pre-merge-validation\.md/);
+  const guide=fs.readFileSync(path.join(base,'references','pre-merge-validation.md'),'utf8');
+  assert.match(guide,/Sol/);
+});

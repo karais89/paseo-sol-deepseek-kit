@@ -6,5 +6,5 @@
     "Existing tests continue to pass"
   ],
   "checks": [["node", "--test"]],
-  "protectedPaths": [".git", "scripts/install.mjs"]
+  "protectedPaths": [".git/config", ".git/info/exclude", "scripts/install.mjs"]
 }

@@ -19,6 +19,7 @@ function fake({ plan = 'Plan: delegate the work.', worker = 'Changed file and te
   let checkCall = 0;
   const ops = {
     snapshot: async () => ({ dirty: false, revision: 'initial-HEAD' }),
+    protectedSnapshot: async () => 'protected-stable',
     check: async commands => [{ command: commands[0], exitCode: checkCodes[Math.min(checkCall++, checkCodes.length - 1)], tail: 'verification output' }],
     evidence: async () => ({ changedFiles: ['fix.js'], diff: 'diff --git a/fix.js b/fix.js', diffHash: 'abc123' }),
   };

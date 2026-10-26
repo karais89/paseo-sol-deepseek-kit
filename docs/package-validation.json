@@ -4,10 +4,11 @@
   "checks": {
     "officialSkillStructureValidator": "passed",
     "installerBehaviorTests": { "passed": 6, "failed": 0 },
-    "relativeDocumentationLinks": { "passed": 6, "failed": 0 },
+    "relativeDocumentationLinks": { "passed": 12, "failed": 0 },
     "profileSettingsMatchRequestedSettings": true,
     "personalPathAndCredentialPatternScan": "passed",
-    "cliDryRun": "passed"
+    "cliDryRun": "passed",
+    "llmGuideCliProcedure": "passed in an isolated workspace: preview, apply, verify, preserve unrelated settings"
   },
   "environment": { "os": "Windows", "node": "24.19.0" },
   "limits": [

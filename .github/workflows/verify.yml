@@ -1,0 +1,22 @@
+name: Verify bounded SDK pilot
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check scripts/install.mjs
+      - run: node --check scripts/pilot-runner.mjs
+      - run: node --check scripts/lib/pilot-core.mjs
+      - run: node --check scripts/compare-runs.mjs
+      - run: node --test
+      - run: node scripts/install.mjs --skill-only
+      - run: node scripts/pilot-runner.mjs --task templates/pilot-task.example.json

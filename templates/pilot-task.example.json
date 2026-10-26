@@ -1,0 +1,10 @@
+{
+  "id": "example-small-fix",
+  "goal": "Implement a small, independently testable feature or bug fix in this isolated checkout.",
+  "acceptance": [
+    "Required behavior is covered by a behavioral test",
+    "Existing tests continue to pass"
+  ],
+  "checks": [["node", "--test"]],
+  "protectedPaths": [".git/config", ".git/info/exclude", "scripts/install.mjs"]
+}

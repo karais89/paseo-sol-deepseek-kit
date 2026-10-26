@@ -83,6 +83,16 @@ $paseo-sol-deepseek [실제 작업]
 
 큰 코드·문서 조사, 출처 수집, 대안 비교에는 조사 전용 워커를 먼저 또는 병렬로 사용한다. Sol은 조사 목표·판단 기준을 정하고 결과를 검토한다. 같은 `deepseek41-worker` 프로필로 조사 세션과 구현 세션을 각각 만들 수 있다. 조사 전용 계약에는 편집 금지와 실제 사용 가능한 도구를 명시하되, 지시문만으로 읽기 전용 권한이 강제된다고 간주하지 않는다. [조사 워커 지침](skills/paseo-sol-deepseek/references/research.md), [운영 스킬](skills/paseo-sol-deepseek/SKILL.md), [계약 양식](templates/task-contract.md)을 참고한다.
 
+
+## PR #2: 작은 외부 실행기 파일럿 (실험용)
+
+PR #1의 실제 모델 파일럿에서 Sol 위임 총 토큰이 단독보다 증가했다. Sol이 계획과 최종 판단만 수행하고 **Node + Paseo SDK 실행기**가 워커 실행, 독립 검증과 증거 수집을 맡는 새로운 구조를 분리해 검증한다. 현재 토큰 절감 결과는 **미측정**이며 기존 스킬과 프로필은 변경하지 않는다.
+
+- [실험 가이드](docs/sdk-pilot.md)와 [입력 예시](templates/pilot-task.example.json)를 먼저 확인한다.
+- `node scripts/pilot-runner.mjs --task templates/pilot-task.example.json`은 모델 호출 없는 미리보기다.
+- 명시적인 `--execute`만 실제 Paseo 에이전트를 실행한다. SDK `@getpaseo/client@0.13.0`이 필요하다.
+- 검증은 `node --test`. 실제 모델 실험과 토큰 계측은 CI에 포함하지 않는다.
+
 ## 검증과 한계
 
 ```sh

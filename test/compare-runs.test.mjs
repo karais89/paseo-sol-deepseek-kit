@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {compareRuns,summarizePairs} from '../scripts/compare-runs.mjs';
+const base=(id='a',trial='t1')=>({taskId:id,conditionsId:trial,startRevision:'abc',passed:true,checkEvidence:'test log',usageComplete:true,usageEvidence:'usage log',elapsedMs:1000,sol:{inputTokens:800,cachedInputTokens:600,outputTokens:200},workers:[]});
+const team=(id='a',trial='t1')=>({...base(id,trial),elapsedMs:1200,sol:{inputTokens:250,cachedInputTokens:200,outputTokens:50},workers:[{model:'deepseek',inputTokens:4000,cachedInputTokens:0,outputTokens:1000}],handoff:{workerCompleted:true,notificationDelivered:true,sameSolSession:true,solRequestsWhileWaiting:0,evidence:'timestamp log'}});
+test('count Sol cached input and workers separately',()=>{const r=compareRuns(base(),team());assert.equal(r.sol.reductionPercent,70);assert.equal(r.workerTotalTokens,5000);assert.equal(r.timeRegressionPercent,20)});
+test('reject mismatched revisions',()=>{const b=team();b.startRevision='different';assert.throws(()=>compareRuns(base(),b),/not comparable/)});
+test('reject incomplete quality and usage',()=>{const b=team();b.usageComplete=false;assert.throws(()=>compareRuns(base(),b),/incomplete/);b.usageComplete=true;b.passed=false;assert.throws(()=>compareRuns(base(),b),/incomplete/)});
+test('reject notification and idle polling failures',()=>{const b=team();b.handoff.solRequestsWhileWaiting=1;assert.throws(()=>compareRuns(base(),b),/handoff/);b.handoff.solRequestsWhileWaiting=0;b.handoff.notificationDelivered=false;assert.throws(()=>compareRuns(base(),b),/handoff/)});
+test('reject impossible cache and missing tokens',()=>{const b=team();b.sol.cachedInputTokens=251;assert.throws(()=>compareRuns(base(),b),/invalid/);b.sol.cachedInputTokens=0;delete b.sol.outputTokens;assert.throws(()=>compareRuns(base(),b),/integer/)});
+test('negative savings remain regression',()=>{const b=team();b.sol={inputTokens:1200,cachedInputTokens:0,outputTokens:100};assert.equal(compareRuns(base(),b).sol.reductionPercent,-30)});
+test('six pairs and three tasks pass predefined gate',()=>{const pairs=Array.from({length:6},(_,i)=>[base('task'+(i>>1),'trial'+(i%2)),team('task'+(i>>1),'trial'+(i%2))]);assert.equal(summarizePairs(pairs).gatePassed,true);assert.equal(summarizePairs(pairs.slice(0,2)).gatePassed,false);assert.equal(summarizePairs(pairs,{maxTimeRegressionPercent:10}).gatePassed,false);assert.throws(()=>summarizePairs([pairs[0],pairs[0]]),/duplicate/)});

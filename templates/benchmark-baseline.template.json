@@ -1,0 +1,8 @@
+{
+  "taskId": "REPLACE_TASK", "conditionsId": "REPLACE_UNIQUE_TRIAL", "startRevision": "REPLACE_COMMIT",
+  "passed": false, "checkEvidence": "REPLACE_TEST_EVIDENCE",
+  "usageComplete": false, "usageEvidence": "REPLACE_PROVIDER_USAGE",
+  "elapsedMs": null,
+  "sol": {"inputTokens": null, "cachedInputTokens": null, "outputTokens": null},
+  "workers": []
+}

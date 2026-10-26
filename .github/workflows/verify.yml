@@ -1,0 +1,23 @@
+name: Verify kit
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: |
+          node --check scripts/install.mjs
+          node --check scripts/compare-runs.mjs
+      - name: Node tests
+        run: node --test
+      - name: Skill-only dry run
+        run: node scripts/install.mjs --skill-only

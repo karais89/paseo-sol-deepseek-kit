@@ -83,6 +83,18 @@ $paseo-sol-deepseek [실제 작업]
 
 큰 코드·문서 조사, 출처 수집, 대안 비교에는 조사 전용 워커를 먼저 또는 병렬로 사용한다. Sol은 조사 목표·판단 기준을 정하고 결과를 검토한다. 같은 `deepseek41-worker` 프로필로 조사 세션과 구현 세션을 각각 만들 수 있다. 조사 전용 계약에는 편집 금지와 실제 사용 가능한 도구를 명시하되, 지시문만으로 읽기 전용 권한이 강제된다고 간주하지 않는다. [조사 워커 지침](skills/paseo-sol-deepseek/references/research.md), [운영 스킬](skills/paseo-sol-deepseek/SKILL.md), [계약 양식](templates/task-contract.md)을 참고한다.
 
+## 머지 전 실기 검증
+
+운영 스킬을 수정한 PR은 **테스트 코드 통과만으로 바로 병합하지 않는다.** [실제 비교 가이드](docs/pre-merge-validation.md)를 따라 같은 시작 커밋·검증 기준에서 Sol 단독 실행과 Sol + DeepSeek 위임 실행을 비교한다. 정상 완료뿐 아니라 알림 누락/조기 종료, 권한 차단, 동일 워커 후속 수정도 별도로 확인한다.
+
+```sh
+node --test
+node scripts/compare-runs.mjs --json results/solo-a1.json results/team-a1.json
+# 3개 작업 × 2회씩, 총 6쌍 결과 수집 후 --gate 옵션으로 병합 기준 판단
+```
+
+비교 스크립트는 **실제 측정값을 자동 수집하지 않는다.** 결과 양식은 [Sol 단독](templates/benchmark-baseline.template.json) 및 [위임 실행](templates/benchmark-delegated.template.json)을 참고한다. 기록 누락이나 검증 실패는 합격 처리하지 않으며, 워커 토큰을 Sol 토큰과 합쳐 비용으로 해석하지 않는다. CI는 단위 테스트만 검증하고 실제 Paseo/모델 호출은 수행하지 않는다.
+
 ## 검증과 한계
 
 ```sh

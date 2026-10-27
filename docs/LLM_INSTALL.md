@@ -10,8 +10,10 @@
 | --- | --- |
 | Sol 프로필 | `sol61-orchestrator`: `codex/gpt-6.1-sol`, `auto-review`, 추론 `high`, `service_tier=default`, `plan_mode=false` |
 | DeepSeek 프로필 | `deepseek41-worker`: `opencode/merge-gateway/deepseek/deepseek-v4.1-flash`, `build`, 추론 `max`, `auto_accept=false` |
-| 스킬 | `paseo-sol-deepseek`와 그 아래 `references/research.md` |
-| 운영 흐름 | Sol 계획·분할 → 필요하면 조사 워커 → DeepSeek 구현·검증 → 같은 Sol 대화의 최종 리뷰 |
+| 스킬 | `paseo-sol-deepseek`와 그 아래 실행 스크립트·참고 파일 전체 |
+| 제한 실행 흐름 | 호스트 준비·위임·검증 → DeepSeek 구현 → 도구 없는 Sol 검토 → 같은 워커 수정 최대 1회 |
+
+이 브랜치는 실험용이며 [제약과 실제 결과](gated-experiment.md)를 먼저 읽는다. 제한 경로는 Python 3.11 이상, POSIX 로컬 호스트, 검사된 native Codex CLI가 필요하다. 포함된 도구 목록 검사는 macOS `codex-cli 0.162.1` 바이너리 해시에 묶여 있다. 다른 CLI에서 검사를 우회하거나 일반 실행으로 자동 전환하지 않는다. 프로필 설치와 실제 실행 준비를 구분한다.
 
 설정의 정확한 원본은 [profiles.json](../profiles.json)과 [스킬 폴더](../skills/paseo-sol-deepseek/SKILL.md)다. 두 프로필 이외의 설정·스킬·인증·기존 작업물은 보존한다. 이 설치를 이유로 다른 프로필이나 lean 프로필을 삭제하지 않는다. 토큰 절감 실험이나 실제 개발 작업을 자동으로 시작하지 않는다.
 
@@ -103,7 +105,7 @@ CLI가 PATH에 없다면 찾은 실행 파일의 절대 경로를 사용한다. 
 
 다음 세 범주를 구분해 확인한다.
 
-1. **파일:** 대상 스킬 폴더의 `SKILL.md`와 `references/research.md`가 배포본과 일치한다. 다른 스킬과 개인 파일이 유지됐다.
+1. **파일:** 대상 스킬 폴더의 `SKILL.md`와 모든 배포 스크립트·참고 파일이 배포본과 일치한다. 다른 스킬과 개인 파일이 유지됐다.
 2. **Paseo 반영:** MCP `list_profiles` 또는 해당 호스트의 지원 CLI에서 두 프로필과 정확한 모델·모드·추론·기능 값을 확인한다. 다른 프로필이 유지됐고 설정 reload가 성공했다.
 3. **발견·접근:** Sol이 실제 사용하는 스킬 목록에서 `paseo-sol-deepseek`가 보이고, Paseo 에이전트 생성·완료 알림 도구에 접근할 수 있다. 스킬이 갱신되지 않았다면 새 Sol 세션에서 확인한다. 제공자·모델 접근을 확인하지 못했다면 그 부분은 미확인으로 남긴다.
 
@@ -127,4 +129,4 @@ CLI가 PATH에 없다면 찾은 실행 파일의 절대 경로를 사용한다. 
 $paseo-sol-deepseek [실제 작업]
 ```
 
-계획·최종 리뷰는 같은 Sol 대화를 유지한다. 상세 조사와 구현은 워커가 수행하며 독립된 범위는 병렬로 위임할 수 있다. 기본적으로 별도의 리뷰 워커를 추가하지 않는다.
+제한 경로에서는 호스트가 같은 DeepSeek 워커와 같은 전용 Sol 검토 스레드를 유지한다. 일반 Paseo 시작 대화는 제한되지 않으므로 전체 사용량에 별도로 포함한다. 추가 조사·병렬 작업은 해당 작업의 허용 범위를 따른다.

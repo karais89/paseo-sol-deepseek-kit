@@ -5,55 +5,40 @@ description: Coordinate development in Paseo with Sol 6.1 and OpenCode Merge Gat
 
 # Paseo Sol + DeepSeek
 
-Sol owns the task contract, logical decomposition, final review, and acceptance. DeepSeek owns implementation, behavioral tests, self-review, and first-line fixes. Use the current user task and repository instructions. This skill does not change providers, permissions, host configuration, or deployment scope.
+Use the gated host executor for a bounded task whose contract, required test command and protected paths are known. The host runs one persistent DeepSeek worker. A dedicated Sol 6.1 high review thread sees the original contract and real patch/test evidence, with no execution tools. It can return only accept, one evidence-based correction, or failure. The host enforces the transitions and required checks.
 
-## Plan and launch
+Read [gated execution](references/gated-runner.md) before the first use. This restriction applies to the dedicated reviewer, not to the ordinary Paseo conversation launching it. Do not claim that installing this skill restricts that conversation's general tools. Count launcher and reporting responses separately when measuring the whole user workflow.
 
-- Read enough relevant source and repository instructions to understand the requested behavior and define scope, dependencies, protected files, and acceptance checks. Do not solve the implementation before delegating. Decompose the work logically; a plan item does not require its own agent or a separate model review.
-- Default to one persistent end-to-end DeepSeek worker. Use a second only for independently editable scopes with meaningful parallel work. Do not add a separate review worker by default.
-- For substantial code/document/web research or uncertain implementation direction, use a dedicated research worker before implementation or in parallel with independent work. See [research assignments](references/research.md) when this applies. Profile count does not limit agent count; the same worker profile can launch distinct research and implementation sessions. Do not claim the earlier single-worker measurements validate this topology.
-- Keep planning and final review in the same Sol agent and conversation. Do not create a fresh Sol reviewer or resend the original contract, initial source, and plan in full. If the session cannot be resumed, disclose the context reset and supply the necessary context; do not silently omit requirements.
-- Call Paseo `list_profiles`, read the notes, and select `deepseek41-worker`: provider `opencode`, model `merge-gateway/deepseek/deepseek-v4.1-flash`. Use `sol61-orchestrator` for the coordinator. Do not substitute the similarly named lean profiles or another model silently. Missing or unavailable required profiles are a blocker.
-- A profile supplies launch settings, not a role prompt. `create_agent` has no profile argument: combine provider/model in `provider`; copy `modeId`, `thinkingOptionId`, and `featureValues` into `settings.modeId`, `settings.thinkingOptionId`, and `settings.features`. Use only exposed settings.
-- Use Paseo `create_agent`, not Codex-native subagents. On your host omit `workspaceId` to use the current workspace. On another host resolve `serverId` and the destination workspace first; retain agent and server IDs together. Use worktrees when isolation benefits the task.
-- Use `notifyOnFinish:true` for creation and follow-ups. Reuse the same worker through `send_agent_prompt` for routine corrections.
+Before launch, obtain the task's exact test command and protected paths. If only a task filename is supplied, read its self-contained contract once; do not search unrelated memory or inspect implementation before delegating. Preserve existing edits and task boundaries. Selecting a profile does not invoke the skill.
 
-## Worker contract
+Use this loader inside one `functions.exec`. Fill `options` from the actual contract and set `skillDir` to this skill's actual installed absolute directory; use a fresh run directory under `/private/tmp`. The example checks and `high` are not universal defaults: preserve the user's explicit settings. The currently inspected reviewer route supports `sol61-orchestrator` with Sol 6.1 high, auto-review profile settings and default service tier; it stops on a mismatch rather than substituting.
 
-Send one self-contained assignment containing:
+```js
+// @exec: {"yield_time_ms": 1800000, "max_output_tokens": 6000}
+const options = {
+  skillDir:"<actual installed absolute directory of this skill>",
+  task:"TASK.md", testCommand:"<task-required command>",
+  protectedFiles:["<actual protected paths>"],
+  runDir:"/private/tmp/paseo-gated-UNIQUE_RUN_ID", effort:"high"
+};
+const source = await tools.exec_command({
+  cmd:"cat '" + (options.skillDir + "/scripts/gated_flow.cjs").replaceAll("'", "'\\''") + "'",
+  max_output_tokens:12000
+});
+if (source.exit_code !== 0) throw Error("Gated host executor unavailable");
+const module = {exports:{}};
+new Function("module", source.output)(module);
+text(await module.exports({tools,load,store,notify,ALL_TOOLS}, options));
+```
 
-- The outcome, relevant context, logical work units and dependencies, owned files/modules, protected files, and acceptance criteria. Give source/test paths where known; avoid recursive dependency listings and large irrelevant command output.
-- Validation commands and any required new behavioral tests. The worker investigates, implements, runs checks, inspects its changes, and repairs failures within scope without asking Sol to approve every step.
-- Other agents may share the repository: preserve their edits and do not revert unrelated changes. No extra agents or model changes. Report an unresolved blocker with the failed action and evidence.
-- A concise completion report, normally at most eight bullets: changed files, behavior, actual check commands/results, self-review findings, and unresolved issues. Keep full logs in artifacts; include relevant failure excerpts. Do not claim unrun checks.
+The pending host execution supplies progress, waits for the native worker, collects the patch and required tests, asks the restricted Sol reviewer, and executes at most one correction on the same worker. Do not launch another Sol coordinator/reviewer manually, generate waiting acknowledgements, poll agent status, or repeat the returned patch/tests. Do not accept an advisory summary over actual failed or missing checks. If an exec cell yields, resume the same cell rather than restarting work.
 
-## Event-driven waiting
+Report the host result, actual check evidence and unresolved issues in Korean. On error, permission, timeout, stale tool audit, invalid model action or ambiguous delivery, retain the existing evidence and worker identity; do not automatically retry, change providers or loosen restrictions. An accepted structured review is still subject to any separately required independent evaluation.
 
-This section governs Paseo worker notifications, not waiting for your own active shell command.
+## Other contexts and measurement
 
-While the worker runs, do useful independent coordination only. Do not repeat its implementation, add a duplicate broad test suite, or invent work to occupy the wait.
+The older [inline flow](references/inline-flow.md) and [notification flow](references/notification-flow.md) are available only when the user intentionally chooses the unrestricted workflow. They do not enforce the gated reviewer's tool policy. For independent research see [research assignments](references/research.md); extra agents still need task authorization.
 
-When no independent work remains, immediately end the turn with a short response such as `워커에 위임했으며 완료 알림을 기다립니다.` This yields control to Paseo; completion, errors, permissions, or user input resume the task.
+Keep profiles, authentication and provider configuration unchanged. Native reviewer settings are per-process overrides; its existing account authentication remains in use. Do not copy tokens or use another provider as a fallback. A local tool-inventory audit is pinned to the inspected Codex binary and settings; a mismatch blocks before any worker or reviewer model execution.
 
-Do not keep the turn alive with status/activity/log polling, wait/sleep tools, shell sleeps, progress prompts, schedules, or heartbeats. Inspect status only for a concrete blocker or an explicit user request. Follow-up corrections use the same notification/idle behavior.
-
-For nested coordinator runs in Paseo 0.13 with an outer controller, obtain recipient agent/server IDs in the launch assignment. An interim idle response can reach the outer controller as a finish notification. After final acceptance send one explicit `send_agent_prompt` completion report to that recipient with `notifyOnFinish:false`; first verify the recipient server with `list_hosts`. Do not send that report at initial delegation, guess a recipient, or replace notifications with polling. This workaround was checked in one nested run and is not a general version guarantee.
-
-## Review and accept
-
-- Resume the same Sol session after completion. A worker completion notification triggers review; it does not establish acceptance. Check the actual changes against the original contract, required test delivery, boundaries, integration, and relevant failure cases.
-- Inspect tracked changes against the task's recorded starting revision, including staged changes; include new untracked source/test files once in full. Preserve unrelated initial edits and identify worker-owned changes. Avoid sending both a full modified file and its diff. Load precise surrounding context when the patch is insufficient.
-- Use actual commands and exit codes as test evidence. Successful output can be omitted; retain relevant failures and assertion results. Exit zero alone does not prove a reproduction checks the claimed behavior. Do not count timeout, execution error, or missing evidence as a pass.
-- Run proportionate independent checks for important behavior or missing evidence. Do not automatically repeat the worker's entire investigation. Do not remove required checks to meet a token target; obtain missing evidence before acceptance.
-- Send concrete defects, reproduction, and acceptance criteria to the existing worker. Default to one bounded corrective round followed by review in the same Sol session. If still unresolved, report the blocker and decide a justified next step; do not silently loop. Sol can take over for a difficult defect, integration problem, or worker unavailability, stating the reason.
-- Request an additional review worker when the user asks or a specific unresolved risk warrants an independent opinion. Its output is advisory; Sol retains final acceptance. A review-only assignment needs enforced read/reproduction permissions and isolated scratch when execution is needed. A Build-mode prompt saying "do not edit" is not an enforced boundary.
-- For an automated handoff, distinguish provider response completion from a literal completion marker and from successful validation. Accept only an unambiguous validated structured report as a structured decision. Natural-language review can be passed as unvalidated reference material with decision unknown; malformed or conflicting decisions are not approval. Surface failed handoffs and never label an unfinished pipeline successful.
-- Report outcome, observed checks, and remaining limitations in Korean. Separate worker claims from independent verification. Normal operation has planning/delegation and final review as two Sol stages, not a guaranteed two provider requests. Count tools, context requests, errors, and corrections as actual usage.
-
-## Measurement and invocation
-
-Compare Sol total tokens including cached input against a comparable solo baseline; report cached/noncached input, output, worker usage, request purposes, elapsed time, and requirement results separately. Include auxiliary worker requests when measuring total worker usage. Reasoning included in output must not be counted again. Missing usage means incomplete accounting. Do not export secrets or prompt/response bodies to measurement logs.
-
-Same-session reuse does not guarantee cache hits. Do not equate cross-provider token sums with billing or claim replay measurements prove end-to-end production savings.
-
-Select `sol61-orchestrator` and invoke `$paseo-sol-deepseek` with the actual task. Selecting a profile alone does not invoke this skill. The coordinator reads the skill; the worker receives relevant instructions in its assignment.
+Count actual provider request records, launcher/reviewer/worker usage, corrections and reporting. Review invocations are not proven provider-response counts. Cached input and reasoning are subsets, not extra totals. Missing usage remains incomplete; billing remains unmeasured. Offline replay and tool denial tests do not establish live quality, token savings, OS isolation or a fixed end-to-end response count.

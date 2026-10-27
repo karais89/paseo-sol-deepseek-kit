@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "advertisedTools": [],
+  "policy": {
+    "features.shell_tool": false,
+    "features.apps": false,
+    "features.plugins": false,
+    "features.memories": false,
+    "features.hooks": false,
+    "features.multi_agent": false,
+    "features.skill_search": false,
+    "features.view_image": false,
+    "features.browser_use": false,
+    "features.computer_use": false,
+    "features.image_generation": false,
+    "features.goals": false,
+    "features.sleep_tool": false,
+    "features.tool_suggest": false,
+    "features.workspace_dependencies": false,
+    "features.code_mode_host": false,
+    "features.chronicle": false,
+    "features.enable_request_compression": false,
+    "features.skip_host_skill_discovery": true,
+    "features.code_mode.enabled": false,
+    "web_search": "disabled",
+    "memories.use_memories": false,
+    "memories.generate_memories": false,
+    "project_doc_max_bytes": 0,
+    "model_reasoning_effort": "high",
+    "service_tier": "default"
+  },
+  "binarySha256": "74c6a6d263f40d65f99c27a815275f5b4ed0bcc2baecc396b4cf3255498bdfc0",
+  "nativeVersion": "codex-cli 0.162.1",
+  "sameThreadResume": true,
+  "fixtureRequests": [
+    {
+      "model": "gpt-6.1-sol",
+      "tools": [],
+      "toolsFieldPresent": false,
+      "hasAuthorizationHeader": false
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "tools": [],
+      "toolsFieldPresent": false,
+      "hasAuthorizationHeader": false
+    }
+  ],
+  "externalModelRequests": 0,
+  "scope": "Actual native initial/resume request envelopes with offline SSE replay only"
+}

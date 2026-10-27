@@ -1,0 +1,134 @@
+{
+  "trialId": "paseo-full-usage-20261027",
+  "collectedAt": "2026-10-27T06:05:36.424961+00:00",
+  "status": "FAIL_USAGE_REDUCTION",
+  "flowStatus": "COMPLETED_AFTER_EXPLICIT_USER_APPROVAL",
+  "functionalStatus": "PASS",
+  "elapsedSeconds": 905.388,
+  "knownSubtotals": {
+    "allBenchmarkSolIncludingCache": 1009722,
+    "workerReportedVisibleOutput": 48220
+  },
+  "teamTotal": null,
+  "teamAccounting": "INCOMPLETE",
+  "billing": "NOT_MEASURED",
+  "comparison": {
+    "previousFullSolTokens": 223842,
+    "previousFullSolResponses": 7,
+    "tokenIncreaseVsPreviousPercent": 351.0869273862814,
+    "historicalSoloTokens": 125326,
+    "ratioToHistoricalSolo": 8.05676395959338,
+    "freshPairedSoloRun": false,
+    "runs": 1,
+    "endToEndReductionEstablished": false,
+    "approvalInterruptedRun": true
+  },
+  "executionControl": {
+    "dedicatedReviewer": "PASS_NO_TOOL_CALLS",
+    "launcher": "FAIL_LONG_WAIT_PRAGMA_OMITTED",
+    "approvedResume": "Original candidate and same worker/reviewer retained; launcher adapted the in-memory host code to resume the blocked stage. This is not a supported packaged resume path."
+  },
+  "sourceCommit": "7235563",
+  "models": {
+    "sol": "gpt-6.1-sol",
+    "solEffort": "high",
+    "worker": "merge-gateway/deepseek/deepseek-v4.1-flash",
+    "workerEffort": "high"
+  },
+  "sol": {
+    "accounting": "COMPLETE",
+    "scope": "All fresh benchmark Sol: original launch, waiting, approval interruption, user-approved continuation, dedicated reviewer, and both final replies",
+    "responseCount": 30,
+    "totalIncludingCache": 1009722,
+    "inputIncludingCache": 1003608,
+    "cachedInput": 915584,
+    "uncachedInput": 88024,
+    "generationIncludingReasoning": 6114,
+    "reasoningSubset": 2978,
+    "requestSumsMatchFinalCumulativeForBothThreads": true
+  },
+  "roles": {
+    "launcher": {
+      "responses": 28,
+      "tokensIncludingCache": 964422,
+      "waitResumes": 18
+    },
+    "reviewer": {
+      "responses": 2,
+      "tokensIncludingCache": 45300,
+      "toolCalls": {}
+    },
+    "worker": {
+      "responses": 55,
+      "accounting": "INCOMPLETE",
+      "total": null,
+      "knownSubtotals": {
+        "reportedVisibleOutput": 48220
+      }
+    }
+  },
+  "validation": {
+    "externalTests": 24,
+    "candidateTests": 38,
+    "blankRecords": "PASS",
+    "longInputs": "PASS",
+    "graderHashMatches": true
+  },
+  "approvalInterruption": {
+    "initialPhaseSolResponses": 17,
+    "initialPhaseSolTokens": 434605,
+    "reason": "Automatic approval review rejected transmitting the full task/patch/tests to a separate Sol process because the initial independent prompt did not explicitly authorize the disclosure.",
+    "userApprovalObservedAt": "2026-10-27T05:56:35.242Z",
+    "sameWorkerPreserved": true,
+    "freshWorkflowRelaunches": 0,
+    "automaticModelRetry": false
+  },
+  "preservation": {
+    "status": "PASS",
+    "checkedPaths": 523,
+    "unchangedPaths": 519,
+    "changedPhysicalFiles": 1,
+    "runtimeMatchesSnapshot": true
+  },
+  "separateDevelopmentOverhead": {
+    "status": "KNOWN_SUBTOTAL_FINAL_REPLY_PENDING",
+    "scope": "Current existing development/commit/push/measurement conversation; separate from the complete fresh operational benchmark",
+    "knownResponseCount": 22,
+    "knownUsage": {
+      "input_tokens": 2980336,
+      "cached_input_tokens": 2920832,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 28287,
+      "reasoning_output_tokens": 11333,
+      "total_tokens": 3008623
+    }
+  },
+  "evidenceHashes": {
+    "taskSha256": "54cb8e639e51404f9ad79c8bff8ff48560dc4b62b0d654afe87d0eec29a1fa90",
+    "graderSha256": "4833c02f8ecacf5da858fb79391c422671bd35807c7146358fd1e9be399da6be",
+    "launcherRolloutSha256": "9e2a476132cfbf065257656c3a932f75c8e3222aac5bdbdaa648423cf33b2967",
+    "reviewerRolloutSha256": "970a7d8cc085a43c298b247756ac78861079a3c4303cd4653ea2ae42bb068c41",
+    "workerSourceRowsSha256": "bb3d9656f9ba0e770049f653d681dfcd8a5713af636ffee450d924210d4efda7",
+    "runtimeFiles": {
+      "SKILL.md": "cf8f6b69d5a72355d0c001e29d4fe35670e45dae2f437d70d0d9e03904fc77b2",
+      "references/nested-completion.md": "d71db078e7171790e4796146feb4b4136f21a5b367e508e586a86628d10b6ffc",
+      "references/notification-flow.md": "2e7d5986e53d578f8740849ae1af5c13fa7801dce4fb406edbe5a1d914313aba",
+      "references/inline-flow.md": "e6a7ac26896ad791e3fe480d64b890395e40c79946f6b3593149a3de6e3620bb",
+      "references/research.md": "1b12264c9a16ae78e8e611c8359152e551b29403458603a29d4a9b652d7dbdf9",
+      "references/gated-runner.md": "c1e5e10fb23fcd8565a538b3119f2f7420451ce558a008d48fa3893217d57358",
+      "scripts/gated_flow.cjs": "118c2e5022b817b12b5e12620ec1686c801c024b4eb38b48f9d4940f60f60f5b",
+      "scripts/team_context.py": "216c3f4c7f4853c790c05bae7d86e3bda622dad74475f1d16b6fe6d187b62054",
+      "scripts/sol-tool-audit.json": "3eea98e13d67b4c0c419a1007099e7b71d2646a4370ddc740d6bc73b16d45e98",
+      "scripts/sol_judge.py": "587e8b3f9423a29d74b5781e693854b3dda420ffe95447325484d5fc0295208d",
+      "scripts/team_flow.cjs": "3c21892880a8cc691683d95d5ae749945c6f452abc2707fca986eb77f176e339",
+      "scripts/review_after_worker.py": "2d4a9c097e58cc4620cb25116960136f3920ab63d5d11cf587a28e26814d5d8a"
+    }
+  },
+  "limitations": [
+    "One approval-interrupted workflow, not an uninterrupted paired A/B experiment.",
+    "The launcher omitted the long exec pragma and added model responses to wait; its extra evidence reads also consumed tokens.",
+    "The reviewer had no execution tools, but the unrestricted launcher was not bound to the host state machine.",
+    "Merge reports zero input, so worker/team totals and billing remain unknown.",
+    "All benchmark responses including both final replies are included; the current development and publishing conversation is reported separately as a known subtotal before its final reply."
+  ]
+}
